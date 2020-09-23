@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        //包名
+        applicationId "com.yiban1314.yiban"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        signingConfig {
+            keyAlias 'yiban'
+            keyPassword 'yiban1314'
+            storeFile file('yiban.jks')
+            storePassword 'yiban1314'
+        }
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled true//是否混淆
+            zipAlignEnabled true//Zipalign优化
+            shrinkResources true//去掉不用资源
+            signingConfig signingConfigs.signingConfig
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false//是否混淆，测试服也需要开启混淆避免在测试没发现混淆问题，在线上出现。关闭可以编译快点
+            zipAlignEnabled false//Zipalign优化
+            shrinkResources false//去掉不用资源
+            signingConfig signingConfigs.signingConfig //在这加上签名文件，就可以直接跑到手机上也是正常，不用打包出来安装
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    //微信支付
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    //eventbus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+}
